@@ -41,14 +41,16 @@ def create_task(name):
 
 
 
-@main.command()
 def access_task():
     """ Load tasks from json file into tasks list. """
     with open(jsontasksfile, 'r') as jsonfile:
         tasks_dictionarys = json.load(jsonfile)
-        return [Task.convert_dict(task_dictionary) for task_dictionary in tasks_dictionarys]
+        return [Task.from_dictionary(task_dictionary) for task_dictionary in tasks_dictionarys]
     
     return []
+
+# Updating the task array
+tasks = access_task()
 
 @main.command()
 @click.argument('taskname')
@@ -57,6 +59,8 @@ def end_task(taskname):
     for task in tasks:
         if task.name == taskname:
             task.end_task()
+            # Save task to file for later usage
+            save_task()
             
 
 

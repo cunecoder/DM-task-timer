@@ -54,10 +54,10 @@ class Task:
     def from_dictionary(cls, task_dict):
         """ Create a task object by loading data from json file. """
         task = cls(task_dict["name"])
-        task.name = task_dict[name]
-        task.start_time = task_dict[start]
-        task.end_time = task_dict[end]
-        task.total_time = task_dict[total_time]
+        task.name = task_dict["name"]
+        task.start_time = task_dict["start"]
+        task.end_time = task_dict["end"]
+        task.total_time = task_dict["total_time"]
         return task
 
 
