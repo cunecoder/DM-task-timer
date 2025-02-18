@@ -1,13 +1,12 @@
 # main
 # task-timer
 # David Marin
-# Last Updated: 1/29/2025
+# Last Updated: 2/18/2025
   
 import click
 import json
+import rich
 from task_class import Task
-
-tasks = []
 
 jsontasksfile = "tasksfile.json"
 
@@ -33,11 +32,11 @@ def create_task(name):
         if task.name == task_name:
             console.print("Task name taken.")
             return
-    task = Task(name)
-    tasks.append(task)
+        
+    newtask = Task(name)
 
     # Immediately save task to a file
-    save_task()
+    save_task(newtask)
 
 
 
@@ -50,14 +49,17 @@ def access_task():
     return []
 
 # Updating the task array
-tasks = access_task()
+# tasks = access_task()
 
 @main.command()
 @click.argument('taskname')
 def end_task(taskname):
     """ End a task and display total time of said task. """
+
+    print(f'Tasks right now: {tasks}')
+
     for task in tasks:
-        if task.name == taskname:
+        if task.name == 'taskname':
             task.end_task()
             # Save task to file for later usage
             save_task()
