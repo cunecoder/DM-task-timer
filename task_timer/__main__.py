@@ -9,10 +9,17 @@ import json
 import rich
 from rich.table import Table
 from rich.console import Console
+from rich.progress import track
+from time import sleep
 import os
 from task_class import Task
 
 jsontasksfile = "tasksfile.json"
+
+def process_data():
+    """ Have a clock for the progress bar. """
+
+    sleep(0.02)
 
 @click.group()
 def main():
@@ -196,6 +203,12 @@ def edit_timesheet():
         if task_dict_list[i]['name'] == name:
             task_dict_list[i][thing2edit] = edit
             save_data(task_dict_list)
+
+    # Printing progress bar
+    for _ in track(range(100), description='[green]Updating timesheet'):
+        process_data()
+    
+    console.print('Timesheet updated. Please print timesheet to see update.', style='bright_green')
 
 if __name__ == '__main__':
     main()
