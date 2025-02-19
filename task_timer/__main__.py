@@ -155,5 +155,47 @@ def timesheet():
     console.print(table)
 
 
+
+
+@main.command()
+def edit_timesheet():
+    """ Allow user to choose what to edit in timesheet. """
+
+    # Really, the user is just editing the json file which is a list of dictionaries containing
+    # the data to all of the tasks. So we create a nice menu to ask the user what they want to edit,
+    # then we pass their option into the function that actually edits the timesheet.
+
+    console = Console()
+    task_dict_list = load_file()
+
+    # Getting user input for what they want to edit
+    console.print("Please enter the name of the task to edit: ", style='dark_violet')
+    name = input()
+
+    console.print('\nWhat would you like edit for that task? (Enter cooresponding letter):\n', style='dark_violet')
+    console.print('(n)....................... name', style='cyan1')
+    console.print('(s)................. start time', style='green1')
+    console.print('(e)................... end time', style='red1')
+    console.print('(t)................. total time', style='dark_slate_gray1')
+    thing2edit = input()
+
+    # Changing thing2edit to correct format for editing
+    if thing2edit == 's':
+        thing2edit = 'start'
+    elif thing2edit == 'e':
+        thing2edit = 'end'
+    elif thing2edit == 't':
+        thing2edit = 'total_time'
+    elif thing2edit == 'n':
+        thing2edit = 'name'
+
+    console.print(f'\nWhat would you to change it to? (Please enter in correct format. Run timesheet for reference)', style='dark_violet')
+    edit = str(input())
+
+    for i in range(len(task_dict_list)):
+        if task_dict_list[i]['name'] == name:
+            task_dict_list[i][thing2edit] = edit
+            save_data(task_dict_list)
+
 if __name__ == '__main__':
     main()
