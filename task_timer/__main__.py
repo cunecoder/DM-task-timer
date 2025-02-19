@@ -179,6 +179,15 @@ def edit_timesheet():
     console.print("Please enter the name of the task to edit: ", style='dark_violet')
     name = input()
 
+    # Checking if task with 'name' exists
+    tasknotfound = True
+    for i in range (len(task_dict_list)):
+        if task_dict_list[i]['name'] == name:
+            tasknotfound = False
+    if tasknotfound:
+        console.print(f'Sorry, no task with name {name}...', style='red1')
+        return
+
     console.print('\nWhat would you like edit for that task? (Enter cooresponding letter):\n', style='dark_violet')
     console.print('(n)....................... name', style='cyan1')
     console.print('(s)................. start time', style='green1')
