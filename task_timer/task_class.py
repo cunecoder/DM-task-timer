@@ -4,6 +4,8 @@
 #
 # usage: from task_class import Task
 import datetime
+import rich
+from rich.console import Console
 
 
 class Task:
@@ -17,6 +19,8 @@ class Task:
         """ Initiate a Task class with Task characteristics. """
         # *** Task's timer is started automatically when a Task object is created for efficiency purposes.
 
+        console = Console()
+
         self.name = name
         self.start_time = datetime.datetime.now()
         self.end_time = "Running..."
@@ -24,7 +28,7 @@ class Task:
 
         # I want a message to display immediately when the task is created
         format = "%Y-%m-%d %I:%M:%S %p"
-        print(f'Task "{self.name}" created at {(self.start_time).strftime(format)}.')
+        console.print(f'Task "{self.name}" created at {(self.start_time).strftime(format)}.', style='yellow4')
 
     def convert_todict(self):
         """ Return the data of an object in dictionary form for json file input. """

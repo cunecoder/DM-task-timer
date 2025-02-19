@@ -54,13 +54,15 @@ def dict_to_task(dictionary):
 def create_task(name):
     """ Create a new task 'Name' using click. """
 
+    console = Console()
+
     # First we check if there is a task already named 'name'.
     # We load the list of dictionaries from the file and loop through to check.
     datalist = load_file()
 
     for dict in datalist:
         if dict['name'] == name:
-            print(f'Sorry, there is already a task with the name "{name}"...')
+            console.print(f'Sorry, there is already a task with the name "{name}"...', style='red1')
             return
 
     newtask = Task(name)
@@ -80,6 +82,8 @@ def end_task(taskname):
     # This variable used for errors if task is not found
     tasknotfound = True
 
+    console = Console()
+
     # First load the list of dictionaries (tasks data, but not objects) from json file.
     # We then search through the dictionaries to see if one matches the name of what task we want to end.
     # If there is a dictionary with our wanted name, we update that dictionary's end_time to the current time,
@@ -95,20 +99,21 @@ def end_task(taskname):
             end = (task_dict_list[i]['end'])
             task_dict_list[i]['total_time'] = str(end - start)
 
-            print(f'Ended task "{task_dict_list[i]['name']}" at {task_dict_list[i]['end']}.')
+            console.print(f'Ended task "{task_dict_list[i]['name']}" at {task_dict_list[i]['end']}.', style='red1')
 
             # Changing dictionary['end'] into a string because "datetime" object is not json serializable
             task_dict_list[i]['end'] = str(task_dict_list[i]['end'])
             save_data(task_dict_list)
 
     if tasknotfound:
-        print(f'Sorry, no task with name "{taskname}" was found...')
+        console.print(f'Sorry, no task with name "{taskname}" was found...', style='red1')
 
 
 @main.command()
 def running_tasks():
     """ Print out each tasks that are running. """
 
+    console = Console()
     task_notfound = True
 
     # We first load the list of dictionaries with each task's data into a variable.
@@ -120,10 +125,10 @@ def running_tasks():
     for i in range(len(task_dict_list)):
         if task_dict_list[i]['end'] == "Running...":
             task_notfound = False
-            print(f'\nTask "{task_dict_list[i]['name']}" is currently running: Started at {task_dict_list[i]['start']}.')
+            console.print(f'\nTask "{task_dict_list[i]['name']}" is currently running: Started at {task_dict_list[i]['start']}.', style='orange1')
 
     if task_notfound:
-        print("Sorry, there are no running tasks...")
+        console.print("Sorry, there are no running tasks...", style='red1')
 
 @main.command()
 def timesheet():
@@ -137,9 +142,9 @@ def timesheet():
     table = Table(title="Task Timesheet")
 
     table.add_column("Task Name", style="cyan1")
-    table.add_column("Start Time", style="dark_orange")
-    table.add_column("End Time", style="cyan1")
-    table.add_column("Total Time", style="dark_orange")
+    table.add_column("Start Time", style="green1")
+    table.add_column("End Time", style="red1")
+    table.add_column("Total Time", style="dark_slate_gray1")
 
     # Creating a row for each dictionary (task) in the list from json file
 
@@ -148,6 +153,7 @@ def timesheet():
 
     console = Console()
     console.print(table)
+
 
 if __name__ == '__main__':
     main()
