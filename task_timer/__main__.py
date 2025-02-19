@@ -7,6 +7,8 @@ import click
 import datetime
 import json
 import rich
+from rich.table import Table
+from rich.console import Console
 import os
 from task_class import Task
 
@@ -88,11 +90,12 @@ def end_task(taskname):
         if task_dict_list[i]['name'] == taskname:
             tasknotfound = False
             task_dict_list[i]['end'] = datetime.datetime.now()
-            # format = "%Y-%m-%d %I:%M:%S %p"
             format = "%Y-%m-%dT%H:%M:%S.%f"
             start = datetime.datetime.strptime((task_dict_list[i]['start']), format)
             end = (task_dict_list[i]['end'])
             task_dict_list[i]['total_time'] = str(end - start)
+
+            print(f'Ended task "{task_dict_list[i]['name']}" at {task_dict_list[i]['end']}.')
 
             # Changing dictionary['end'] into a string because "datetime" object is not json serializable
             task_dict_list[i]['end'] = str(task_dict_list[i]['end'])
@@ -101,15 +104,50 @@ def end_task(taskname):
     if tasknotfound:
         print(f'Sorry, no task with name "{taskname}" was found...')
 
-# @click.command()
-# @click.argument('choice')
-# @click.option('-createtask', '-ct', help='Create task with inputted name')
-# def main(choice, createtask):
-#     """ This is my main cli. """
-#     #if choice = 'printq':
-#         #question()
-    
-#     click.echo(f"Testing first; name of your task is {createtask}, but arg is {choice}!")
+
+@main.command()
+def running_tasks():
+    """ Print out each tasks that are running. """
+
+    task_notfound = True
+
+    # We first load the list of dictionaries with each task's data into a variable.
+    # Then we iterate through the dictionaries to find any whose end is 'Running...' and
+    # print the contents of the task if it is currently running.
+    task_dict_list = load_file()
+
+
+    for i in range(len(task_dict_list)):
+        if task_dict_list[i]['end'] == "Running...":
+            task_notfound = False
+            print(f'\nTask "{task_dict_list[i]['name']}" is currently running: Started at {task_dict_list[i]['start']}.')
+
+    if task_notfound:
+        print("Sorry, there are no running tasks...")
+
+@main.command()
+def timesheet():
+    """ Print out a timesheet of all tasks. """
+
+    # First load list of dicts with task data into a variable.
+    # Then print out all data for each variable.
+
+    task_dict_list = load_file()
+
+    table = Table(title="Task Timesheet")
+
+    table.add_column("Task Name", style="cyan1")
+    table.add_column("Start Time", style="dark_orange")
+    table.add_column("End Time", style="cyan1")
+    table.add_column("Total Time", style="dark_orange")
+
+    # Creating a row for each dictionary (task) in the list from json file
+
+    for i in range(len(task_dict_list)):
+        table.add_row(f'{task_dict_list[i]['name']}', f'{task_dict_list[i]['start']}', f'{task_dict_list[i]['end']}', f'{task_dict_list[i]['total_time']}')
+
+    console = Console()
+    console.print(table)
 
 if __name__ == '__main__':
     main()
