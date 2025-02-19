@@ -13,13 +13,13 @@ class Task:
     #     * Start/stop time on task
     #     * Display current time task is taking
 
-    def __init__(self, name="Task"):
+    def __init__(self, name="Default Task", start_time=0, end_time="Running...", total_time=0):
         """ Initiate a Task class with Task characteristics. """
         # *** Task's timer is started automatically when a Task object is created for efficiency purposes.
 
         self.name = name
         self.start_time = datetime.datetime.now()
-        self.end_time = "In progress..."
+        self.end_time = "Running..."
         self.total_time = 0
 
         # I want a message to display immediately when the task is created
@@ -42,25 +42,14 @@ class Task:
         # Displaying duration of task
         print(f'Task "{self.name}" ended at {self.end_time}. Total duration: {self.total_time}.')
 
-    def convert_dict(self):
-        """ Convert data of object to dictionary for json file input. """
+    def convert_todict(self):
+        """ Return the data of an object in dictionary form for json file input. """
         return {
             "name" : self.name,
-            "start" : self.start_time,
+            "start" : self.start_time.isoformat(),
             "end" : self.end_time,
             "total_time" : self.total_time,
         }
-
-    def from_dictionary(cls, task_dict):
-        """ Create a task object by loading data from json file. """
-        task = cls(task_dict["name"])
-        task.name = task_dict["name"]
-        task.start_time = task_dict["start"]
-        task.end_time = task_dict["end"]
-        task.total_time = task_dict["total_time"]
-        return task
-
-
 
     def display_time(self):
         """ Display the total_time of a task. """
