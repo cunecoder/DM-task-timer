@@ -5,7 +5,11 @@
 * Start/End tasks (pretty much stopwatches with names)
 * See current running tasks
 * Print timesheet of tasks
+
+# Project Extensions
+* Concurrent Tasks
 * COLOR! (using rich)
+* Timesheet is editable by user
 
 # Usage
 1. Clone repo
